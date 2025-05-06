@@ -1,0 +1,5 @@
+for ((i=1; i<=83; i++)); do
+    # Pad numbers with leading zeros (e.g., 01-09)
+    printf -v num "%02d" $i
+    tmsh create ltm node fmnzoneb$num.fmrtest.com { fqdn { autopopulate enabled name fmnzoneb$num.fmrtest.com } monitor default state user-up }
+done
