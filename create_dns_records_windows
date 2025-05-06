@@ -1,0 +1,48 @@
+# Import DNS Server module
+Import-Module DnsServer
+
+# Check if running as Administrator
+if (-not ([Security.Principal.WindowsPrincipal]::new([Security.Principal.WindowsIdentity]::GetCurrent())).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Write-Host "This script must be run as Administrator." -ForegroundColor Red
+    exit
+}
+
+# Configuration
+$ZoneName = "test.com"
+$RecordBaseName = "testzone"
+$TotalHostnames = 73           # 17 x 3 = 51 A records
+$ARecordsPerName = 3           # 3 A records per hostname
+$IPBase = "10.1.2"          # First 3 octets of IP
+
+# Validate DNS zone exists
+try {
+    $zone = Get-DnsServerZone -Name $ZoneName -ErrorAction Stop
+    Write-Host "Zone '$ZoneName' found." -ForegroundColor Green
+} catch {
+    Write-Host "Zone '$ZoneName' not found. Error: $_" -ForegroundColor Red
+    exit
+}
+
+# Add A records
+$global:recordCount = 0
+
+for ($hostnameNum = 1; $hostnameNum -le $TotalHostnames; $hostnameNum++) {
+    # Format hostname with leading zero (e.g., app01, app02)
+    $hostname = "$RecordBaseName{0:D2}" -f $hostnameNum
+
+    for ($i = 1; $i -le $ARecordsPerName; $i++) {
+        # Calculate unique IP per A record
+        $ipIndex = (($hostnameNum - 1) * $ARecordsPerName) + $i
+        $IPAddress = "$IPBase.$ipIndex"
+
+        try {
+            Add-DnsServerResourceRecordA -Name $hostname -ZoneName $ZoneName -IPv4Address $IPAddress -ErrorAction Stop
+            Write-Host "Added A record: $hostname.$ZoneName -> $IPAddress" -ForegroundColor Green
+            $global:recordCount++
+        } catch {
+            Write-Host "Failed to add: $hostname.$ZoneName -> $IPAddress. Error: $_" -ForegroundColor Red
+        }
+    }
+}
+
+Write-Host "Successfully added $global:recordCount A records." -ForegroundColor Green
