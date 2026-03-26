@@ -1,0 +1,28 @@
+# =============================================
+# requirements.txt for jg2235/scripts
+# Pinned versions for reproducibility and stability
+# Last updated: March 2026
+# =============================================
+
+# Core HTTP client for F5 XC API calls
+requests==2.32.3
+
+# Modern HTTP library (requests dependency, pinned for security)
+urllib3==2.3.0
+
+# Beautiful, rich terminal output with tables and progress bars
+rich==13.9.4
+
+# Better date/time handling (especially useful for certificate expiration)
+python-dateutil==2.9.0.post0
+
+# Data processing & clean CSV/Excel export for inventory results
+pandas==2.2.3
+openpyxl==3.1.5
+
+# Optional: Progress bars (great for large inventories)
+tqdm==4.67.1
+
+# Optional: Type checking & modern Python features (recommended)
+pydantic==2.10.6
+typing-extensions==4.12.2
