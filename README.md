@@ -9,6 +9,7 @@ A collection of useful automation scripts for network, infrastructure, and DevOp
 ### F5 XC (Distributed Cloud)
 - **`f5xc-lb-certificate-inventory.py`** — Generates an inventory of certificates attached to load balancers.
 - **`f5xc-lb-waf-inventory.py`** — Pulls WAF policy and configuration inventory for load balancers.
+- **`f5xc-tenant-map.py`** — Pulls the LB/pool/healthcheck/WAF relationships per namespace, and renders a self-contained interactive HTML map
 
 ### F5 BIG-IP
 - **`gtm-cleanup.sh`** — Cleanup script for Global Traffic Manager (GTM) objects.
